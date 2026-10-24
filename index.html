@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OneOfOne — Singular Digital Editions Store</title>
+  <meta name="description" content="Exclusive 1-of-1 digital products. Each piece can be sold only once." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400..700&family=Noto+Nastaliq+Urdu:wght@400..700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-main: #09090b; --bg-card: #121215; --border-color: #27272a;
+      --text-main: #f4f4f5; --text-muted: #a1a1aa; --text-dim: #71717a;
+      --accent: #f59e0b; --paypal-gold: #ffc439; --paypal-gold-hover: #f4b41a;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      --font-urdu: "Noto Nastaliq Urdu", "Noto Naskh Arabic", serif;
+    }
+    body { font-family: var(--font-stack); background: var(--bg-main); color: var(--text-main); line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    .announcement-bar { background: linear-gradient(90deg, rgba(245,158,11,0.15), rgba(24,24,27,0.9), rgba(245,158,11,0.15)); border-bottom: 1px solid rgba(245,158,11,0.3); padding: 8px 16px; text-align: center; font-size: 12px; font-weight: 600; color: #fde68a; }
+    .header { border-bottom: 1px solid var(--border-color); padding: 36px 20px 24px; text-align: center; background: radial-gradient(circle at top center, rgba(245,158,11,0.08) 0%, transparent 70%); }
+    .header-container { max-width: 800px; margin: 0 auto; }
+    .store-badge { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; }
+    .store-title { font-size: 32px; font-weight: 900; letter-spacing: -0.5px; color: #fff; margin-bottom: 8px; }
+    @media (min-width: 640px) { .store-title { font-size: 42px; } }
+    .store-tagline { font-size: 15px; color: var(--text-muted); max-width: 540px; margin: 0 auto 18px; }
+    .scarcity-note { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); padding: 6px 14px; border-radius: 8px; font-size: 12px; color: #e4e4e7; }
+    .scarcity-note .dot { width: 7px; height: 7px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
+    .filter-wrapper { position: sticky; top: 0; z-index: 20; background: rgba(9,9,11,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); padding: 12px 16px; }
+    .filter-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .filter-buttons { display: flex; align-items: center; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+    .filter-buttons::-webkit-scrollbar { display: none; }
+    .filter-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s ease; white-space: nowrap; }
+    .filter-btn:hover { color: var(--text-main); border-color: #52525b; background: rgba(255,255,255,0.04); }
+    .filter-btn.active { background: #fff; color: #09090b; border-color: #fff; font-weight: 700; }
+    .item-counter { font-size: 12px; color: var(--text-dim); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .playlist-section { max-width: 1200px; width: 100%; margin: 18px auto 0; padding: 0 16px; display: none; }
+    .playlist-wrapper { background: rgba(18,18,21,0.7); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+    @media (min-width: 640px) { .playlist-wrapper { flex-direction: row; align-items: center; justify-content: space-between; } }
+    .playlist-header-text { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; }
+    .playlist-header-text svg { width: 15px; height: 15px; fill: var(--accent); }
+    .playlist-tabs { display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    .playlist-tabs::-webkit-scrollbar { display: none; }
+    .playlist-tab-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all 0.15s ease; white-space: nowrap; }
+    .playlist-tab-btn:hover { color: var(--text-main); border-color: #52525b; background: rgba(255,255,255,0.07); }
+    .playlist-tab-btn.active { background: rgba(245,158,11,0.15); border-color: var(--accent); color: #fde68a; }
+    .playlist-count-badge { display: inline-block; padding: 1px 6px; border-radius: 999px; font-size: 10px; font-weight: 700; background: rgba(255,255,255,0.08); color: var(--text-dim); }
+    .playlist-tab-btn.active .playlist-count-badge { background: var(--accent); color: #09090b; }
+    .main-content { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 24px 16px 48px; }
+    .product-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+    @media (min-width: 600px) { .product-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
+    @media (min-width: 960px) { .product-grid { grid-template-columns: repeat(3, 1fr); gap: 28px; } }
+    .product-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; position: relative; }
+    .product-card:hover { transform: translateY(-3px); border-color: #3f3f46; box-shadow: 0 16px 32px rgba(0,0,0,0.4); }
+    .card-media { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #18181b; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; user-select: none; }
+    .product-card:hover .card-media img { transform: scale(1.03); }
+    .badge-group { position: absolute; top: 12px; left: 12px; z-index: 2; display: flex; align-items: center; gap: 6px; }
+    .type-badge { background: rgba(9,9,11,0.85); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.15); color: #f4f4f5; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 10px; border-radius: 6px; }
+    .playlist-badge { background: rgba(245,158,11,0.2); backdrop-filter: blur(6px); border: 1px solid rgba(245,158,11,0.5); color: #fde68a; font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 6px; letter-spacing: 0.3px; }
+    .rarity-pill { position: absolute; top: 12px; right: 12px; z-index: 2; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: #6ee7b7; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 999px; display: flex; align-items: center; gap: 4px; }
+    .rarity-pill::before { content: ""; width: 5px; height: 5px; background: #10b981; border-radius: 50%; }
+    .card-body { padding: 18px; display: flex; flex-direction: column; flex: 1; }
+    .card-title { font-family: var(--font-urdu); direction: rtl; text-align: right; font-size: 19px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.85; unicode-bidi: plaintext; word-break: break-word; }
+    .card-scarcity-hint { font-size: 11px; color: var(--accent); margin-bottom: 16px; }
+    .card-footer { margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .card-price { font-size: 20px; font-weight: 900; color: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .card-price-label { display: block; font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .btn-buy { background: var(--paypal-gold); color: #003087; border: none; font-size: 13px; font-weight: 800; padding: 10px 18px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.15s ease; text-decoration: none; box-shadow: 0 4px 12px rgba(255,196,57,0.2); }
+    .btn-buy:hover { background: var(--paypal-gold-hover); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(255,196,57,0.35); }
+    .btn-buy:active { transform: translateY(0); }
+    .paypal-icon { width: 14px; height: 14px; fill: #003087; }
+    .empty-state { text-align: center; padding: 64px 20px; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: 16px; max-width: 480px; margin: 40px auto; }
+    .empty-icon { font-size: 32px; margin-bottom: 12px; }
+    .empty-title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .empty-text { font-size: 13px; color: var(--text-muted); }
+    .footer { border-top: 1px solid var(--border-color); background: #060608; padding: 36px 20px 24px; text-align: center; margin-top: auto; }
+    .footer-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+    .security-badge { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; color: #e4e4e7; }
+    .security-badge svg { width: 16px; height: 16px; fill: #3b82f6; }
+    .footer-contact { font-size: 13px; color: var(--text-muted); }
+    .footer-contact a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .footer-copy { font-size: 11px; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px; }
+  </style>
+</head>
+<body>
+
+  <aside class="announcement-bar">
+    <span>🔒 One-of-a-kind items. Once sold, each product is permanently removed.</span>
+  </aside>
+
+  <header class="header">
+    <div class="header-container">
+      <div class="store-badge">1 OF 1 STORE</div>
+      <h1 class="store-title">Singular Digital Editions</h1>
+      <p class="store-tagline">Exclusive 1-of-1 digital products. Each piece can be purchased only once.</p>
+      <div class="scarcity-note">
+        <span class="dot"></span>
+        <span>One-of-a-kind item. Once sold, it is removed.</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="filter-wrapper" aria-label="Product categories">
+    <div class="filter-container">
+      <div class="filter-buttons" id="filter-buttons"></div>
+      <div class="item-counter" id="item-counter">Loading...</div>
+    </div>
+  </nav>
+
+  <section class="playlist-section" id="playlist-section" aria-label="Video playlists">
+    <div class="playlist-wrapper">
+      <div class="playlist-header-text">
+        <svg viewBox="0 0 24 24"><path d="M19 9H2V7h17v2zm0-4H2V3h17v2zm-7 8H2v-2h10v2zm5-1v6l5-3-5-3z"/></svg>
+        <span>Video Playlists</span>
+      </div>
+      <div class="playlist-tabs" id="playlist-tabs"></div>
+    </div>
+  </section>
+
+  <main class="main-content">
+    <section class="product-grid" id="product-grid" aria-label="Available digital products"></section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="security-badge">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+        <span>Secure checkout with PayPal</span>
+      </div>
+      <p class="footer-contact">
+        Questions about an acquisition? Contact: <a href="mailto:myownquiz804@gmail.com">myownquiz804@gmail.com</a>
+      </p>
+      <p class="footer-copy">
+        © <span id="year"></span> Singular Digital Store. All items shown are watermarked low-resolution previews. Original unwatermarked files are transferred exclusively after verified purchase.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // HOW TO ADD A NEW PRODUCT:
+    // Copy a block below. Type: "Video" (use playlist: "Funny"|"Other Videos"|"Islamic"), "Photo", "Book", "Thumbnail", or "Post".
+    // Set sold: true to automatically hide an item when sold.
+    const PRODUCTS = [
+      {
+        title: "🤣 جب بندر پاکستانی ہوٹل پر چائے پینے گیا!",
+        type: "Video",
+        playlist: "Funny",
+        price: "$1",
+        previewImage: "preview1.jpg",
+        buyLink: "https://payhip.com/b/f2tgD",
+        sold: false
+      },
+      {
+        title: "🤣 بندر کی شادی ٹوٹ گئی! دلہن نے گھر مانگ لیا! 🐒💔",
+        type: "Video",
+        playlist: "Funny",
+        price: "$1",
+        previewImage: "preview2.jpg",
+        buyLink: "https://payhip.com/b/t4a8A",
+        sold: false
+      },
+      {
+        title: "😂 جب مرغی ٹیچر بنی اور بندر نے پوری کلاس ہنسا دی! 🐔🐒",
+        type: "Video",
+        playlist: "Funny",
+        price: "$1",
+        previewImage: "preview3.jpg",
+        buyLink: "https://payhip.com/b/R5K4F",
+        sold: false
+      },
+      {
+        title: "🤣 جب گدھا پولیس والا اور بندر نکلا چالاک! 🫏🐒",
+        type: "Video",
+        playlist: "Funny",
+        price: "$0.50",
+        previewImage: "preview4.jpg",
+        buyLink: "https://payhip.com/b/EugPz",
+        sold: false
+      }
+    ];
+
+    const VIDEO_PLAYLISTS = ["Funny", "Other Videos", "Islamic"];
+    let currentPlaylist = "Funny";
+    let currentFilter = 'all';
+
+    function updateFilterButtons(availableProducts) {
+      const filterContainer = document.getElementById('filter-buttons');
+      const availableTypes = [];
+      availableProducts.forEach(function(p) {
+        if (p.type && !availableTypes.includes(p.type)) availableTypes.push(p.type);
+      });
+      if (currentFilter !== 'all' && !availableTypes.includes(currentFilter)) currentFilter = 'all';
+      let html = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">All</button>`;
+      availableTypes.forEach(function(type) {
+        const isActive = currentFilter.toLowerCase() === type.toLowerCase();
+        html += `<button class="filter-btn ${isActive ? 'active' : ''}" data-filter="${escapeHtml(type)}">${escapeHtml(type)}</button>`;
+      });
+      filterContainer.innerHTML = html;
+    }
+
+    function updatePlaylistTabs(availableVideos) {
+      const section = document.getElementById('playlist-section');
+      const tabs = document.getElementById('playlist-tabs');
+      if (currentFilter.toLowerCase() !== 'video') { section.style.display = 'none'; return; }
+      section.style.display = 'block';
+
+      const counts = { "Funny": 0, "Other Videos": 0, "Islamic": 0 };
+      availableVideos.forEach(function(v) {
+        const pl = v.playlist || "Other Videos";
+        if (counts.hasOwnProperty(pl)) counts[pl]++; else counts["Other Videos"]++;
+      });
+
+      tabs.innerHTML = VIDEO_PLAYLISTS.map(function(name) {
+        const isActive = currentPlaylist === name;
+        return `<button class="playlist-tab-btn ${isActive ? 'active' : ''}" data-playlist="${escapeHtml(name)}">
+          <span>${escapeHtml(name)}</span><span class="playlist-count-badge">${counts[name] || 0}</span>
+        </button>`;
+      }).join('');
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      const counter = document.getElementById('item-counter');
+      const availableProducts = PRODUCTS.filter(p => p.sold !== true);
+      updateFilterButtons(availableProducts);
+
+      const availableVideos = availableProducts.filter(p => (p.type || '').toLowerCase() === 'video');
+      updatePlaylistTabs(availableVideos);
+
+      let filtered = [];
+      if (currentFilter === 'all') {
+        filtered = availableProducts;
+        counter.textContent = `${filtered.length} of ${availableProducts.length} item${availableProducts.length === 1 ? '' : 's'} available`;
+      } else if (currentFilter.toLowerCase() === 'video') {
+        filtered = availableVideos.filter(v => (v.playlist || "Other Videos") === currentPlaylist);
+        counter.textContent = `${filtered.length} video${filtered.length === 1 ? '' : 's'} available in "${currentPlaylist}"`;
+      } else {
+        filtered = availableProducts.filter(p => (p.type || '').toLowerCase() === currentFilter.toLowerCase());
+        counter.textContent = `${filtered.length} of ${availableProducts.length} item${availableProducts.length === 1 ? '' : 's'} available`;
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = currentFilter.toLowerCase() === 'video'
+          ? `<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-icon">🎬</div><h2 class="empty-title">No videos here yet</h2><p class="empty-text">No videos have been added to the "${escapeHtml(currentPlaylist)}" playlist yet.</p></div>`
+          : `<div class="empty-state" style="grid-column: 1 / -1;"><div class="empty-icon">💎</div><h2 class="empty-title">No Available Artifacts</h2><p class="empty-text">No items in this category.</p></div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(function(product, index) {
+        const isVideo = (product.type || '').toLowerCase() === 'video';
+        const playlistLabel = isVideo && product.playlist ? escapeHtml(product.playlist) : '';
+        return `
+          <article class="product-card" id="product-${index}">
+            <div class="card-media">
+              <div class="badge-group">
+                <span class="type-badge">${escapeHtml(product.type || 'Item')}</span>
+                ${playlistLabel ? `<span class="playlist-badge">${playlistLabel}</span>` : ''}
+              </div>
+              <span class="rarity-pill">1 of 1</span>
+              <img src="${escapeHtml(product.previewImage)}" alt="${escapeHtml(product.title)}" loading="lazy" />
+            </div>
+            <div class="card-body">
+              <h2 class="card-title" dir="rtl">${escapeHtml(product.title)}</h2>
+              <div class="card-scarcity-hint"><span>✦ One-of-a-kind item. Once sold, it is removed.</span></div>
+              <div class="card-footer">
+                <div>
+                  <span class="card-price-label">Price</span>
+                  <span class="card-price">${escapeHtml(product.price)}</span>
+                </div>
+                <a href="${escapeHtml(product.buyLink)}" target="_blank" rel="noopener noreferrer" class="btn-buy" aria-label="Buy ${escapeHtml(product.title)} for ${escapeHtml(product.price)} with PayPal">
+                  <svg class="paypal-icon" viewBox="0 0 24 24"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.79.79 0 0 1 .78-.663h7.172c3.272 0 5.64 1.135 5.64 4.385 0 2.664-1.637 4.542-4.14 5.385l-.396.115c-.417.12-.66.527-.58.948l.758 4.092a.64.64 0 0 1-.63.755H9.516l-.808 3.5c-.066.29-.323.497-.62.497z"/></svg>
+                  <span>Buy Now</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+
+        document.getElementById('filter-buttons').addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('filter-btn')) {
+        currentFilter = e.target.getAttribute('data-filter');
+        renderProducts();
+      }
+    });
+
+    document.getElementById('playlist-tabs').addEventListener('click', function(e) {
+      const btn = e.target.closest('.playlist-tab-btn');
+      if (btn) {
+        currentPlaylist = btn.getAttribute('data-playlist');
+        renderProducts();
+      }
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    renderProducts();
+  </script>
+</body>
+</html>'click', function(e) {
+      if (e.target && e.target.classList.contains('filter-btn')) {
+        document.querySelecto
